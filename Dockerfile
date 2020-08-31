@@ -1,20 +1,17 @@
-FROM node:alpine
+FROM node:12.14.0-alpine3.11
 
-# set working directory
+RUN apk add --no-cache bash git vim
+
 WORKDIR /app
 
-# add `/app/node_modules/.bin` to $PATH
 ENV PATH /app/node_modules/.bin:$PATH
+ENV CI=true
 
-# install app dependencies
-COPY package.json ./app
-
-# RUN npm cache clean --force
+COPY . .
 RUN npm install
-RUN npm install react-scripts@3.4.1 -g
-RUN npm install axios react-router-dom
+RUN npm install react-scripts@3.4.0 -g
+RUN npm install axios react-router-dom bootstrap @types/react-dom @types/react-router --save
 
-COPY . ./app
+EXPOSE 3000
 
-# start app
 CMD ["npm", "run", "start"]
